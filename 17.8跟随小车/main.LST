@@ -1,0 +1,63 @@
+C51 COMPILER V9.52.0.0   MAIN                                                              04/10/2024 17:58:11 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          
+   3          #include "motor.h"
+   4          #include "delay.h"
+   5          
+   6          //sbit leftSensor = P2^7;
+   7          //sbit rightSensor = P2^6;
+   8          
+   9          sbit leftSensor= P2^5;
+  10          sbit rightSensor = P2^4;
+  11          
+  12          void main()
+  13          {
+  14   1        
+  15   1      
+  16   1       //左边跟随模块能返回红外，输出低电平，右边不能返回，输出高电平，说明物�
+             -��在左边需要左转，右边同理
+  17   1        while(1){
+  18   2          
+  19   2        if(!leftSensor && !rightSensor){ //两个低电平，两个模块都能反射回来红外线 -- 亮灯 --
+             - 向前
+  20   3        goForward(); 
+  21   3        }
+  22   2        if(leftSensor && !rightSensor){//左边模块被黑线吸收，无法返回红外线 -- 高电平--灭�
+             -� --左转
+  23   3        goRight();
+  24   3        } 
+  25   2        if(!leftSensor && rightSensor){//右边模块被黑线吸收，无法返回红外线 -- 高电平--灭灯
+             - -- 右转
+  26   3        goLeft(); 
+  27   3        } 
+  28   2        if(leftSensor && rightSensor){
+  29   3         //左右模块都没反射回来 -- 停
+  30   3          stop();
+  31   3        }
+  32   2        
+  33   2      
+  34   2        }
+  35   1      
+  36   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     38    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
