@@ -1,0 +1,238 @@
+C51 COMPILER V9.52.0.0   MAIN                                                              04/14/2024 21:43:26 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "hc04.h"
+   3          #include "delay.h"
+   4          #include "sg90.h"
+   5          #include "motor.h"
+   6          #include "oled.h"
+   7           
+   8           
+   9          #define MIDDLE 0
+  10          #define LEFT   1
+  11          #define RIGHT  2
+  12          
+  13          
+  14          #define BZ   1
+  15          #define XJ   2
+  16          #define GS   3
+  17          
+  18          //语音识别接口
+  19          sbit A25=P1^5;
+  20          sbit A26=P1^6;
+  21          sbit A27=P1^7;
+  22          
+  23          
+  24          //循迹的传感器
+  25          sbit leftSensorX = P2^7;
+  26          sbit rightSensorX = P2^6; 
+  27          //跟随的传感器
+  28          sbit leftSensorG= P2^5;
+  29          sbit rightSensorG = P2^4;
+  30          
+  31            char dir;
+  32            double disMiddle;
+  33            double disLeft;
+  34            double disRight;
+  35            
+  36            
+  37          void xunJiMode()
+  38          {
+  39   1        if(!leftSensorX && !rightSensorX){ //两个低电平，两个模块都能反射回来红外线 -- 亮灯
+             - -- 向前
+  40   2      //  speedLeft=18;
+  41   2      //  speedRight=18;
+  42   2          goForward();
+  43   2        }
+  44   1        if(leftSensorX && !rightSensorX){//左边模块被黑线吸收，无法返回红外线 -- 高电平--灭
+             -灯 --左转
+  45   2      //  speedLeft=5;
+  46   2      //  speedRight=18;
+  47   2          goLeft();
+  48   2        } 
+  49   1        if(!leftSensorX && rightSensorX){//右边模块被黑线吸收，无法返回红外线 -- 高电平--灭�
+             -�� -- 右转
+  50   2      //  speedLeft=18;
+  51   2      //  speedRight=5;
+  52   2          goRight();
+C51 COMPILER V9.52.0.0   MAIN                                                              04/14/2024 21:43:26 PAGE 2   
+
+  53   2        } 
+  54   1         if(leftSensorX && rightSensorX){
+  55   2         //左右模块都没反射回来 -- 停
+  56   2      //  speedLeft=0;
+  57   2      //  speedRight=0;
+  58   2           stop();
+  59   2        }
+  60   1        
+  61   1      
+  62   1      
+  63   1      
+  64   1      
+  65   1      }
+  66            
+  67          void genSuiMode()
+  68          {
+  69   1      
+  70   1        if(!leftSensorG && !rightSensorG){ //两个低电平，两个模块都能反射回来红外线 -- 亮灯 
+             --- 向前
+  71   2        goForward(); 
+  72   2        }
+  73   1        if(leftSensorG && !rightSensorG){//左边模块被黑线吸收，无法返回红外线 -- 高电平--灭
+             -灯 --左转
+  74   2        goRight();
+  75   2        } 
+  76   1        if(!leftSensorG && rightSensorG){//右边模块被黑线吸收，无法返回红外线 -- 高电平--灭�
+             -�� -- 右转
+  77   2        goLeft(); 
+  78   2        } 
+  79   1        if(leftSensorG && rightSensorG){
+  80   2         //左右模块都没反射回来 -- 停
+  81   2          stop();
+  82   2        }
+  83   1        
+  84   1      
+  85   1      
+  86   1      
+  87   1      }
+  88            
+  89          void biZhangMode()
+  90          {
+  91   1      
+  92   1         Delay200ms();
+  93   1          if(dir != MIDDLE){    
+  94   2          sgMiddle();
+  95   2          dir = MIDDLE;
+  96   2          Delay450ms();
+  97   2          }
+  98   1           disMiddle=get_distance();
+  99   1          
+ 100   1           if(disMiddle>35){
+ 101   2             goForward();
+ 102   2             //closeStatusLight();
+ 103   2           //前进
+ 104   2          }
+ 105   1          
+ 106   1          else if(disMiddle<10){ //离得太近得后退
+ 107   2            goBack();
+ 108   2            //Delay200ms();
+ 109   2            //stop();
+ 110   2          }
+ 111   1          else{
+C51 COMPILER V9.52.0.0   MAIN                                                              04/14/2024 21:43:26 PAGE 3   
+
+ 112   2             //openStatusLight();
+ 113   2             stop();
+ 114   2          //停止 --测距
+ 115   2              sgLeft();
+ 116   2              Delay450ms();
+ 117   2              disLeft=get_distance();
+ 118   2             
+ 119   2              
+ 120   2              sgMiddle();
+ 121   2      
+ 122   2              Delay450ms();
+ 123   2             
+ 124   2              sgRight();
+ 125   2              dir=RIGHT;
+ 126   2              Delay450ms();
+ 127   2            
+ 128   2              disRight=get_distance();
+ 129   2             if(disLeft<disRight){
+ 130   3                 goRight();
+ 131   3                 Delay200ms();
+ 132   3                 stop();
+ 133   3             }
+ 134   2              if(disLeft>disRight){
+ 135   3                 goLeft();
+ 136   3                 Delay200ms();
+ 137   3                 stop();
+ 138   3             }
+ 139   2            
+ 140   2          }
+ 141   1      
+ 142   1      
+ 143   1      }
+ 144          
+ 145          
+ 146          void main()
+ 147          {
+ 148   1        int mark=0;
+ 149   1      
+ 150   1        Time0Init();
+ 151   1        Time1Init();
+ 152   1        //刚上电让摄像头保持在中间
+ 153   1         sgMiddle();
+ 154   1         dir = MIDDLE;
+ 155   1         Delay450ms();
+ 156   1         
+ 157   1        
+ 158   1        //EX0Init(); //外部中断初始化
+ 159   1        Oled_Init(); //初始化OLED
+ 160   1        Oled_Clear();
+ 161   1        Oled_Show_Str(2,2,"------Ready------");
+ 162   1        while(1){
+ 163   2          //循迹模式
+ 164   2         if(A25==0 && A26==1 && A27==1){
+ 165   3           if(mark != XJ){
+ 166   4           Oled_Show_Str(2,2,"----XunJi----");
+ 167   4           Oled_Clear();
+ 168   4           }
+ 169   3           mark=XJ;
+ 170   3           xunJiMode();
+ 171   3          }
+ 172   2          //避障模式
+ 173   2            if(A25==1 && A26==0 && A27==1){
+C51 COMPILER V9.52.0.0   MAIN                                                              04/14/2024 21:43:26 PAGE 4   
+
+ 174   3              if(mark!=BZ){// 判断当前模式是否相同，防止重复刷新导致的闪屏
+ 175   4              Oled_Show_Str(2,2,"---BiZhang---");
+ 176   4              Oled_Clear();
+ 177   4              }
+ 178   3              mark = BZ;
+ 179   3              biZhangMode();
+ 180   3          }
+ 181   2          //跟随模式  
+ 182   2            if(A25==1 && A26==1 && A27==0){
+ 183   3              if(mark != GS){
+ 184   4              Oled_Show_Str(2,2,"---GenSui---");
+ 185   4              Oled_Clear();
+ 186   4              }
+ 187   3              mark=GS;
+ 188   3           genSuiMode();
+ 189   3          }
+ 190   2          // 停下
+ 191   2          if(A25==0 && A26==0 && A27==0){
+ 192   3           stop();
+ 193   3          }
+ 194   2          
+ 195   2          
+ 196   2        }
+ 197   1      } 
+ 198          
+ 199          
+ 200          
+ 201          
+ 202          
+ 203          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    439    ----
+   CONSTANT SIZE    =     59    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     13       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
