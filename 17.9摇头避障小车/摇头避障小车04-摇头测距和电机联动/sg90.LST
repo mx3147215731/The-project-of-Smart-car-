@@ -1,0 +1,114 @@
+C51 COMPILER V9.52.0.0   SG90                                                              04/14/2024 19:26:32 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE SG90
+OBJECT MODULE PLACED IN sg90.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE sg90.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "delay.h"
+   3          
+   4          sbit D5       = P3^7;//根据原理图（电路图），设备变量led1指向P3组IO口的第7口
+   5          sbit D6       = P3^6;//根据原理图（电路图），设备变量led2指向P3组IO口的第6口
+   6          
+   7          sbit sg90_con = P1^1;
+   8          
+   9          int jd;
+  10          
+  11          int cnt = 0;
+  12          
+  13          
+  14          void Time0Init()
+  15          {
+  16   1        //1. 配置定时器0工作模式位16位计时
+  17   1        TMOD &= 0xF0;   //设置定时器模式
+  18   1        TMOD |= 0x01;
+  19   1        //2. 给初值，定一个0.5出来
+  20   1        TL0=0x33;
+  21   1        TH0=0xFE;
+  22   1        //3. 开始计时
+  23   1        TR0 = 1;
+  24   1        TF0 = 0;
+  25   1        //4. 打开定时器0中断
+  26   1        ET0 = 1;
+  27   1        //5. 打开总中断EA
+  28   1        EA = 1;
+  29   1      }
+  30          
+  31          void openStatusLight()
+  32          {
+  33   1        D5 = 0;
+  34   1        D6 = 1;
+  35   1      }
+  36          void closeStatusLight()
+  37          {
+  38   1        D5 = 1;
+  39   1        D6 = 0;
+  40   1      }
+  41          
+  42          
+  43          
+  44          void sgMiddle()
+  45          {
+  46   1        //舵机开盖
+  47   1        jd = 3; //90度 1.5ms高电平
+  48   1        cnt = 0;
+  49   1      
+  50   1      }
+  51          
+  52          void sgLeft() //135 度
+  53          {
+  54   1        //舵机开盖
+  55   1        jd = 5;  //135 度 
+C51 COMPILER V9.52.0.0   SG90                                                              04/14/2024 19:26:32 PAGE 2   
+
+  56   1        cnt = 0;
+  57   1      
+  58   1      }
+  59          
+  60          
+  61          void sgRight()
+  62          {
+  63   1        //关盖
+  64   1        jd = 1; //0度
+  65   1        cnt = 0;
+  66   1        
+  67   1      
+  68   1      }
+  69          
+  70          void Time0Handler() interrupt 1
+  71          {
+  72   1        cnt++;  //统计爆表的次数. cnt=3的时候，报表了1
+  73   1        //重新给初值
+  74   1        TL0=0x33;
+  75   1        TH0=0xFE;
+  76   1        
+  77   1        //控制PWM波
+  78   1        if( cnt < jd){
+  79   2          sg90_con = 1;
+  80   2        }else{
+  81   2          sg90_con = 0;
+  82   2        }
+  83   1        
+  84   1        if(cnt == 40){//爆表40次，经过了20ms
+  85   2          cnt = 0;  //当100次表示1s，重新让cnt从0开始，计算下一次的1s
+  86   2          sg90_con = 1;
+  87   2        }
+  88   1          
+  89   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    134    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

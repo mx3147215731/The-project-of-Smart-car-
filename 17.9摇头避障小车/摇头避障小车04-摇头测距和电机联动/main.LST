@@ -1,0 +1,112 @@
+C51 COMPILER V9.52.0.0   MAIN                                                              04/14/2024 19:26:32 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "hc04.h"
+   3          #include "delay.h"
+   4          #include "sg90.h"
+   5          #include "motor.h"
+   6           
+   7           
+   8          #define MIDDLE 0
+   9          #define LEFT   1
+  10          #define RIGHT  2
+  11          
+  12          
+  13          
+  14          
+  15          void main()
+  16          {
+  17   1        
+  18   1        char dir;
+  19   1        double disMiddle;
+  20   1        double disLeft;
+  21   1        double disRight;
+  22   1        Time0Init();
+  23   1        Time1Init();
+  24   1        //刚上电让摄像头保持在中间
+  25   1         sgMiddle();
+  26   1         dir = MIDDLE;
+  27   1         Delay450ms();
+  28   1         Delay450ms();
+  29   1        while(1){
+  30   2          Delay200ms();
+  31   2          if(dir != MIDDLE){    
+  32   3          sgMiddle();
+  33   3          dir = MIDDLE;
+  34   3          Delay450ms();
+  35   3          }
+  36   2           disMiddle=get_distance();
+  37   2          
+  38   2           if(disMiddle>40){
+  39   3             goForward();
+  40   3             //closeStatusLight();
+  41   3           //前进
+  42   3          }
+  43   2          
+  44   2          else if(disMiddle<10){ //离得太近得后退
+  45   3            goBack();
+  46   3            //Delay200ms();
+  47   3            //stop();
+  48   3          }
+  49   2          else{
+  50   3             //openStatusLight();
+  51   3             stop();
+  52   3          //停止 --测距
+  53   3              sgLeft();
+  54   3              Delay450ms();
+  55   3              disLeft=get_distance();
+C51 COMPILER V9.52.0.0   MAIN                                                              04/14/2024 19:26:32 PAGE 2   
+
+  56   3             
+  57   3              
+  58   3              sgMiddle();
+  59   3      
+  60   3              Delay450ms();
+  61   3             
+  62   3              sgRight();
+  63   3              dir=RIGHT;
+  64   3              Delay450ms();
+  65   3            
+  66   3              disRight=get_distance();
+  67   3             if(disLeft<disRight){
+  68   4                 goRight();
+  69   4                 Delay200ms();
+  70   4                 stop();
+  71   4             }
+  72   3              if(disLeft>disRight){
+  73   4                 goLeft();
+  74   4                 Delay200ms();
+  75   4                 stop();
+  76   4             }
+  77   3            
+  78   3          }
+  79   2      
+  80   2        }
+  81   1      } 
+  82          
+  83          
+  84          
+  85          
+  86          
+  87          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    203    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

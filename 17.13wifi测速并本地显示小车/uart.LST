@@ -1,0 +1,133 @@
+C51 COMPILER V9.52.0.0   UART                                                              04/08/2024 22:54:22 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN uart.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE uart.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "motor.h"
+   3          #include "string.h"
+   4          
+   5          
+   6          #define SIZE 12
+   7          sfr AUXR = 0x8E;
+   8          char buffer[SIZE];
+   9          
+  10          extern char AT_OK_Flag; 
+  11          extern char Client_Connect_Flag;
+  12          
+  13          void UartInit(void)   //9600bps@11.0592MHz
+  14          {
+  15   1        AUXR=0x01; //减少定时器辐射 -- 抗干扰
+  16   1        SCON =0x50; //配置 串口口工作方式1，REN 使能接收
+  17   1        //不配 PCON  -- 不设置倍数关系
+  18   1        //配置定时器1为 8位自动重装
+  19   1        TMOD &=0xF0; //高位清零
+  20   1        TMOD |=0x20;  //00 10  -- 配置为定时器1为: 1 0 模式 -- 8位自动重装
+  21   1        
+  22   1        //定义初值
+  23   1        TL1=0xFD;
+  24   1        TH1=0xFD; // 9600 波特率的初值
+  25   1        TR1= 1; // 定时器 -- 启动
+  26   1        
+  27   1        EA =1; // 开启总中断
+  28   1        ES=1;  // 开启串口中断
+  29   1        
+  30   1      }
+  31          
+  32          
+  33          void sendByte(char mydata)
+  34          {
+  35   1        SBUF=mydata;
+  36   1        while(!TI); //TI用来记录是否发送成功， 0 -- 没发送成功， 1 -- 发送成功
+  37   1        TI=0;
+  38   1      
+  39   1      }
+  40          
+  41          
+  42          void sendString(char *str)
+  43          {
+  44   1       while(*str != '\0'){
+  45   2         sendByte(*str);
+  46   2         str++;
+  47   2        }
+  48   1      
+  49   1      }
+  50          
+  51          
+  52          void uartHandler() interrupt 4
+  53          {
+  54   1        static int  i = 0;
+  55   1        char tmp;
+C51 COMPILER V9.52.0.0   UART                                                              04/08/2024 22:54:22 PAGE 2   
+
+  56   1       if(RI) // 中断处理函数中，对于接收中断的响应
+  57   1       {
+  58   2          RI=0; //清楚接收中断标志位
+  59   2          tmp = SBUF;
+  60   2          if(tmp == 'M' || tmp == 'O'|| tmp == '0' )
+  61   2             i=0;
+  62   2          buffer[i++]=tmp;
+  63   2      
+  64   2            if(buffer[0]=='0' && buffer[2]=='C'){//0,Connect
+  65   3           Client_Connect_Flag=1;
+  66   3           memset(buffer,'\0',SIZE);
+  67   3          }
+  68   2      
+  69   2            if(buffer[0]=='O' && buffer[1]=='K'){//联网成功 WIFI GOT 
+  70   3           AT_OK_Flag=1;
+  71   3           memset(buffer,'\0',SIZE);
+  72   3          }
+  73   2          
+  74   2          if(buffer[0] == 'M'){
+  75   3            switch(buffer[1]){
+  76   4            case '1':
+  77   4                goForward();
+  78   4                break;
+  79   4          
+  80   4            case '2':
+  81   4                goBack();
+  82   4                break;
+  83   4            
+  84   4            case '3':
+  85   4                goLeft();
+  86   4                break;
+  87   4          
+  88   4            case '4':
+  89   4                goRight();
+  90   4                break;
+  91   4            default://前提是M开关，但不是上面4跳到额指令不然就进不来了
+  92   4              stop();
+  93   4              break;
+  94   4            
+  95   4            }
+  96   3          
+  97   3          }
+  98   2         if(i == SIZE) {
+  99   3           i = 0;
+ 100   3           memset(buffer,'\0',SIZE);
+ 101   3          }
+ 102   2       }
+ 103   1        
+ 104   1        
+ 105   1      }
+ 106          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    275    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     14    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILER V9.52.0.0   UART                                                              04/08/2024 22:54:22 PAGE 3   
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

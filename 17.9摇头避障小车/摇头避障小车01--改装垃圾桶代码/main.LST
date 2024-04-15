@@ -1,0 +1,64 @@
+C51 COMPILER V9.52.0.0   MAIN                                                              04/13/2024 19:41:44 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "hc04.h"
+   3          #include "delay.h"
+   4          #include "sg90.h"
+   5           
+   6          
+   7          
+   8          
+   9          
+  10          
+  11          void main()
+  12          {
+  13   1        
+  14   1        double dis;
+  15   1        
+  16   1        Time0Init();
+  17   1        Time1Init();
+  18   1        //舵机的初始位置
+  19   1        initSG90_0();
+  20   1        
+  21   1        while(1){
+  22   2          
+  23   2          //超声波测距
+  24   2          dis = get_distance();
+  25   2          if(dis < 10){//如果小于10厘米
+  26   3              //开盖，灯状态，D5亮
+  27   3              openStatusLight();
+  28   3              openDusbin();
+  29   3          }else{
+  30   3              //关盖，灯状态，D5灭
+  31   3              closeStatusLight();
+  32   3              closeDusbin();
+  33   3          }
+  34   2        }
+  35   1      } 
+  36          
+  37          
+  38          
+  39          
+  40          
+  41          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     56    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

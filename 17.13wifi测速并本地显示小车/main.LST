@@ -1,0 +1,84 @@
+C51 COMPILER V9.52.0.0   MAIN                                                              04/08/2024 22:54:22 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "motor.h"
+   3          #include "delay.h"
+   4          #include "uart.h"
+   5          #include "time.h"
+   6          #include "stdio.h"
+   7          #include "oled.h"
+   8          #include "ESP8266.h"
+   9          
+  10          
+  11          sbit speedIO =P3^2; //外部中断0
+  12          unsigned int speedCnt=0;
+  13          extern unsigned int speed;
+  14          extern char signal;
+  15          char speedMes[30];
+  16          //发送数据
+  17          char FSSJ[]="AT+CIPSEND=0,5\r\n";
+  18          
+  19          void EX0Init()
+  20          {
+  21   1      EX0=1; //允许中断
+  22   1      //EA=1; //初始化串口的时候已经打开
+  23   1      IT0=1; //配置为下降沿触发
+  24   1      
+  25   1      
+  26   1      
+  27   1      }
+  28          
+  29          void main()
+  30          {
+  31   1      
+  32   1        Time0Init();//定时器0的初始化 -- 先写 -- 他的TMOD 是直接复制的，为了不影响后面�
+             -�操作
+  33   1        UartInit();//初始化 串口
+  34   1        Delay1000ms(); // 给wifi模块上电时间
+  35   1        initWifI_AP(); // wifi初始化, 工作在工作模式
+  36   1        waitConnect();
+  37   1        
+  38   1        EX0Init(); //外部中断初始化
+  39   1        Oled_Init();
+  40   1        Oled_Clear();
+  41   1        while(1){
+  42   2        if(signal){ //1s发送一次，发完记得复位
+  43   3          sendString(FSSJ);
+  44   3          Delay1000ms();
+  45   3          sprintf(speedMes,"speed: %d cm/s ",speed);//组件字符串
+  46   3          sendString(speedMes);
+  47   3          signal=0;
+  48   3          }
+  49   2          
+  50   2          Oled_Show_Str(2,2,speedMes);
+  51   2        }
+  52   1      
+  53   1      } 
+  54          // 以下的外部中断我们设置为下降沿触发
+C51 COMPILER V9.52.0.0   MAIN                                                              04/08/2024 22:54:22 PAGE 2   
+
+  55          void speedHandler() interrupt 0 
+  56          {
+  57   1       speedCnt++;
+  58   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    109    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     49    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,10 @@
+"STARTUP.obj",
+"main.obj",
+"motor.obj",
+"delay.obj",
+"uart.obj",
+"time.obj",
+"Esp8266.obj",
+"oled.obj" 
+TO "first_led" 
+RAMSIZE(256) 

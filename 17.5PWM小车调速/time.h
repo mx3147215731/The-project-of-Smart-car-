@@ -1,0 +1,1 @@
+void Time0Init();

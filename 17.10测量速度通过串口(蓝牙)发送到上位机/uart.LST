@@ -1,0 +1,117 @@
+C51 COMPILER V9.52.0.0   UART                                                              04/10/2024 21:32:53 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN uart.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE uart.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "motor.h"
+   3          #include "string.h"
+   4          
+   5          
+   6          #define SIZE 12
+   7          sfr AUXR = 0x8E;
+   8          char buffer[SIZE];
+   9          
+  10          void UartInit(void)   //9600bps@11.0592MHz
+  11          {
+  12   1        AUXR=0x01; //减少定时器辐射 -- 抗干扰
+  13   1        SCON =0x50; //配置 串口口工作方式1，REN 使能接收
+  14   1        //不配 PCON  -- 不设置倍数关系
+  15   1        //配置定时器1为 8位自动重装
+  16   1        TMOD &=0xF0; //高位清零
+  17   1        TMOD |=0x20;  //00 10  -- 配置为定时器1为: 1 0 模式 -- 8位自动重装
+  18   1        
+  19   1        //定义初值
+  20   1        TL1=0xFD;
+  21   1        TH1=0xFD; // 9600 波特率的初值
+  22   1        TR1= 1; // 定时器 -- 启动
+  23   1        
+  24   1        EA =1; // 开启总中断
+  25   1        ES=1;  // 开启串口中断
+  26   1        
+  27   1      }
+  28          
+  29          
+  30          void sendByte(char mydata)
+  31          {
+  32   1        SBUF=mydata;
+  33   1        while(!TI); //TI用来记录是否发送成功， 0 -- 没发送成功， 1 -- 发送成功
+  34   1        TI=0;
+  35   1      
+  36   1      }
+  37          
+  38          
+  39          void sendString(char *str)
+  40          {
+  41   1       while(*str != '\0'){
+  42   2         sendByte(*str);
+  43   2         str++;
+  44   2        }
+  45   1      
+  46   1      }
+  47          
+  48          
+  49          void uartHandler() interrupt 4
+  50          {
+  51   1        static int  i = 0;
+  52   1        char tmp;
+  53   1       if(RI) // 中断处理函数中，对于接收中断的响应
+  54   1       {
+  55   2          RI=0; //清楚接收中断标志位
+C51 COMPILER V9.52.0.0   UART                                                              04/10/2024 21:32:53 PAGE 2   
+
+  56   2          tmp = SBUF;
+  57   2          if(tmp == 'M')
+  58   2             i=0;
+  59   2          buffer[i++]=tmp;
+  60   2          if(buffer[0] == 'M'){
+  61   3            switch(buffer[1]){
+  62   4            case '1':
+  63   4                goForward();
+  64   4                break;
+  65   4          
+  66   4            case '2':
+  67   4                goBack();
+  68   4                break;
+  69   4            
+  70   4            case '3':
+  71   4                goLeft();
+  72   4                break;
+  73   4          
+  74   4            case '4':
+  75   4                goRight();
+  76   4                break;
+  77   4            default://前提是M开关，但不是上面4跳到额指令不然就进不来了
+  78   4              stop();
+  79   4              break;
+  80   4            
+  81   4            }
+  82   3          
+  83   3          }
+  84   2         if(i == SIZE) {
+  85   3           i = 0;
+  86   3           memset(buffer,'\0',SIZE);
+  87   3          }
+  88   2       }
+  89   1        
+  90   1        
+  91   1      }
+  92          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    206    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     14    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

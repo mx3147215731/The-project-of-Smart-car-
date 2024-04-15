@@ -1,0 +1,26 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+F:\my_project\project_of_51\17.智能小车\17.9摇头避障小车\摇头避障小车04-摇头测距和电机联动\muban.uvproj
+Project File Date:  04/07/2024
+
+<h2>Output:</h2>
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hc04.c...
+compiling delay.c...
+compiling sg90.c...
+compiling motor.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DELAY2000MS?DELAY
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?OPENSTATUSLIGHT?SG90
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?CLOSESTATUSLIGHT?SG90
+Program Size: data=30.0 xdata=0 code=1209
+creating hex file from "muban"...
+"muban" - 0 Error(s), 3 Warning(s).

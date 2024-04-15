@@ -1,0 +1,9 @@
+"STARTUP.obj",
+"main.obj",
+"motor.obj",
+"delay.obj",
+"uart.obj",
+"time.obj",
+"oled.obj" 
+TO "first_led" 
+RAMSIZE(256) 

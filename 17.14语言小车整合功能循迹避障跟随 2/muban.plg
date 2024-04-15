@@ -1,0 +1,284 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+F:\my_project\project_of_51\17.智能小车\17.14语言小车整合功能循迹避障跟随 2\muban.uvproj
+Project File Date:  04/14/2024
+
+<h2>Output:</h2>
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hc04.c...
+compiling delay.c...
+compiling sg90.c...
+sg90.c(86): warning C206: 'goForward': missing function-prototype
+sg90.c(88): warning C206: 'stop': missing function-prototype
+compiling motor.c...
+compiling oled.c...
+linking...
+Program Size: data=39.0 xdata=0 code=3670
+creating hex file from "muban"...
+"muban" - 0 Error(s), 2 Warning(s).
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+main.c(42): error C202: 'speed': undefined identifier
+compiling hc04.c...
+compiling delay.c...
+compiling sg90.c...
+sg90.c(92): warning C206: 'goForward': missing function-prototype
+sg90.c(94): warning C206: 'stop': missing function-prototype
+compiling motor.c...
+compiling oled.c...
+Target not created
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+main.c(42): warning C275: expression with possibly no effect
+compiling hc04.c...
+compiling delay.c...
+compiling sg90.c...
+sg90.c(92): warning C206: 'goForward': missing function-prototype
+sg90.c(94): warning C206: 'stop': missing function-prototype
+compiling motor.c...
+compiling oled.c...
+linking...
+Program Size: data=39.0 xdata=0 code=3680
+creating hex file from "muban"...
+"muban" - 0 Error(s), 3 Warning(s).
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+main.c(42): warning C275: expression with possibly no effect
+compiling hc04.c...
+compiling delay.c...
+compiling sg90.c...
+sg90.c(3): warning C318: can't open file 'moror.c'
+sg90.c(93): warning C206: 'goForward': missing function-prototype
+sg90.c(95): warning C206: 'stop': missing function-prototype
+compiling motor.c...
+compiling oled.c...
+linking...
+Program Size: data=39.0 xdata=0 code=3680
+creating hex file from "muban"...
+"muban" - 0 Error(s), 4 Warning(s).
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+main.c(42): warning C275: expression with possibly no effect
+compiling hc04.c...
+compiling delay.c...
+compiling sg90.c...
+compiling motor.c...
+compiling oled.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  GORIGHT
+    MODULE:  motor.obj (MOTOR)
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  GOLEFT
+    MODULE:  motor.obj (MOTOR)
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  GOFORWARD
+    MODULE:  motor.obj (MOTOR)
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  STOP
+    MODULE:  motor.obj (MOTOR)
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  GOBACK
+    MODULE:  motor.obj (MOTOR)
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GOBACK?MOTOR
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?STOP?MOTOR
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GOFORWARD?MOTOR
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GOLEFT?MOTOR
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GORIGHT?MOTOR
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOLEFT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0D26H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GORIGHT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0D2FH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0D38H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOFORWARD
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0CE3H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GORIGHT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0CECH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOLEFT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0CF5H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0CFEH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOFORWARD
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 09F8H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOBACK
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A0FH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A12H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GORIGHT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A4DH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A53H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOLEFT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A6DH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A73H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 09C1H
+Program Size: data=39.0 xdata=0 code=3685
+Target not created
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hc04.c...
+compiling delay.c...
+compiling sg90.c...
+compiling motor.c...
+compiling oled.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  GORIGHT
+    MODULE:  motor.obj (MOTOR)
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  GOLEFT
+    MODULE:  motor.obj (MOTOR)
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  GOFORWARD
+    MODULE:  motor.obj (MOTOR)
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  STOP
+    MODULE:  motor.obj (MOTOR)
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  GOBACK
+    MODULE:  motor.obj (MOTOR)
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GOBACK?MOTOR
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?STOP?MOTOR
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GOFORWARD?MOTOR
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GOLEFT?MOTOR
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?GORIGHT?MOTOR
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOLEFT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0D26H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GORIGHT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0D2FH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0D38H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOFORWARD
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0CE3H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GORIGHT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0CECH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOLEFT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0CF5H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0CFEH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOFORWARD
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 09F8H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOBACK
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A0FH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A12H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GORIGHT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A4DH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A53H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  GOLEFT
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A6DH
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 0A73H
+*** ERROR L118: REFERENCE MADE TO ERRONEOUS EXTERNAL
+    SYMBOL:  STOP
+    MODULE:  main.obj (MAIN)
+    ADDRESS: 09C1H
+Program Size: data=39.0 xdata=0 code=3685
+Target not created
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+main.c(42): warning C275: expression with possibly no effect
+compiling hc04.c...
+compiling delay.c...
+compiling sg90.c...
+compiling motor.c...
+compiling oled.c...
+linking...
+Program Size: data=39.0 xdata=0 code=3680
+creating hex file from "muban"...
+"muban" - 0 Error(s), 1 Warning(s).
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hc04.c...
+compiling delay.c...
+compiling sg90.c...
+compiling motor.c...
+compiling oled.c...
+linking...
+Program Size: data=39.0 xdata=0 code=3692
+creating hex file from "muban"...
+"muban" - 0 Error(s), 0 Warning(s).

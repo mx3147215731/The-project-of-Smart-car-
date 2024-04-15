@@ -1,0 +1,76 @@
+C51 COMPILER V9.52.0.0   MAIN                                                              04/10/2024 21:49:59 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "motor.h"
+   3          #include "delay.h"
+   4          #include "uart.h"
+   5          #include "time.h"
+   6          #include "stdio.h"
+   7          #include "oled.h"
+   8          
+   9          
+  10          sbit speedIO =P3^2; //外部中断0
+  11          unsigned int speedCnt=0;
+  12          extern unsigned int speed;
+  13          extern char signal;
+  14          char speedMes[30];
+  15          
+  16          
+  17          void EX0Init()
+  18          {
+  19   1      EX0=1; //允许中断
+  20   1      //EA=1; //初始化串口的时候已经打开
+  21   1      IT0=1; //配置为下降沿触发
+  22   1      
+  23   1      
+  24   1      
+  25   1      }
+  26          
+  27          void main()
+  28          {
+  29   1        Delay1000ms();
+  30   1        Time0Init();//定时器0的初始化 -- 先写 -- 他的TMOD 是直接复制的，为了不影响后面�
+             -�操作
+  31   1        UartInit();//初始化 串口
+  32   1        EX0Init(); //外部中断初始化
+  33   1        Oled_Init(); //初始化OLED
+  34   1          Oled_Clear();
+  35   1        while(1){
+  36   2        if(signal){ //1s发送一次，发完记得复位
+  37   3          sprintf(speedMes,"speed: %d cm/s",speed);//组件字符串
+  38   3          sendString(speedMes);
+  39   3          sendString("\r\n");
+  40   3          signal=0;
+  41   3          }
+  42   2            Oled_Show_Str(2,2,speedMes);
+  43   2        }
+  44   1      
+  45   1      } 
+  46          // 以下的外部中断我们设置为下降沿触发
+  47          void speedHandler() interrupt 0 
+  48          {
+  49   1       speedCnt++;
+  50   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    100    ----
+C51 COMPILER V9.52.0.0   MAIN                                                              04/10/2024 21:49:59 PAGE 2   
+
+   CONSTANT SIZE    =     18    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     32    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

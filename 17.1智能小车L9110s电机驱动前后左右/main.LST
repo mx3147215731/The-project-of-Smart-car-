@@ -1,0 +1,119 @@
+C51 COMPILER V9.52.0.0   MAIN                                                              04/05/2024 18:39:27 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "intrins.h"
+   3          
+   4          sbit RightConA=P3^2;
+   5          sbit RightConB=P3^3;
+   6          
+   7          sbit LeftConA=P3^4;
+   8          sbit LeftConB=P3^5;
+   9          
+  10          
+  11          void Delay1000ms()    //@11.0592MHz
+  12          {
+  13   1        unsigned char i, j, k;
+  14   1      
+  15   1        _nop_();
+  16   1        i = 8;
+  17   1        j = 1;
+  18   1        k = 243;
+  19   1        do
+  20   1        {
+  21   2          do
+  22   2          {
+  23   3            while (--k);
+  24   3          } while (--j);
+  25   2        } while (--i);
+  26   1      }
+  27          
+  28          
+  29          void goForward() // 前进
+  30          {
+  31   1      RightConA=0;
+  32   1      RightConB=1;  
+  33   1        
+  34   1      LeftConA=0;
+  35   1      LeftConB=1; 
+  36   1      
+  37   1      }
+  38          
+  39          
+  40          
+  41          void goBack() // 后退
+  42          {
+  43   1      RightConA=1;
+  44   1      RightConB=0;  
+  45   1        
+  46   1      LeftConA=1;
+  47   1      LeftConB=0; 
+  48   1      
+  49   1      }
+  50          
+  51          void goLeft() // 左转 -- 轮子左边不动，右边前进， 右边的速到大于左边的时候，就
+             -实现了左转
+  52          {
+  53   1      RightConA=0;
+  54   1      RightConB=1;  
+C51 COMPILER V9.52.0.0   MAIN                                                              04/05/2024 18:39:27 PAGE 2   
+
+  55   1        
+  56   1      LeftConA=0;
+  57   1      LeftConB=0; 
+  58   1      
+  59   1      }
+  60          
+  61          
+  62          void goRight() // 右转 --轮子右边不动，左边前进
+  63          {
+  64   1      
+  65   1      RightConA=0;
+  66   1      RightConB=0;  
+  67   1        
+  68   1      LeftConA=0;
+  69   1      LeftConB=1; 
+  70   1      
+  71   1      }
+  72          
+  73          
+  74          
+  75          void main()
+  76          {
+  77   1        while(1){
+  78   2        //开始的时候设置为往前走2s -- 延迟两秒后就往后走
+  79   2        goForward(); 
+  80   2        Delay1000ms();
+  81   2        Delay1000ms();  
+  82   2        goBack();
+  83   2        Delay1000ms();
+  84   2        Delay1000ms();  
+  85   2        goLeft();
+  86   2        Delay1000ms();
+  87   2        Delay1000ms();  
+  88   2        goRight();
+  89   2        Delay1000ms();
+  90   2        Delay1000ms();  
+  91   2        }
+  92   1      
+  93   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     85    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

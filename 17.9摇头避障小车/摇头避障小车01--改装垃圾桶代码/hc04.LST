@@ -1,0 +1,66 @@
+C51 COMPILER V9.52.0.0   HC04                                                              04/13/2024 19:41:44 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE HC04
+OBJECT MODULE PLACED IN hc04.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE hc04.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          #include "delay.h"
+   3          sbit Trig     = P2^3;
+   4          sbit Echo     = P2^2;
+   5          
+   6          void Time1Init()
+   7          { 
+   8   1        TMOD &= 0x0F;   //设置定时器模式
+   9   1        TMOD |= 0x10;
+  10   1        TH1 = 0;
+  11   1        TL1 = 0;
+  12   1        //设置定时器0工作模式1，初始值设定0开始数数，不着急启动定时器
+  13   1      }
+  14          
+  15          void startHC()
+  16          {
+  17   1        Trig = 0;
+  18   1        Trig = 1;
+  19   1        Delay10us();
+  20   1        Trig = 0;
+  21   1      }
+  22          
+  23          double get_distance()
+  24          {
+  25   1          double time;
+  26   1          //定时器数据清零，以便下一次测距
+  27   1          TH1 = 0;
+  28   1          TL1 = 0;
+  29   1        //1. Trig ，给Trig端口至少10us的高电平
+  30   1          startHC();
+  31   1          //2. echo由低电平跳转到高电平，表示开始发送波
+  32   1          while(Echo == 0);
+  33   1          //波发出去的那一下，开始启动定时器
+  34   1          TR1 = 1;
+  35   1          //3. 由高电平跳转回低电平，表示波回来了
+  36   1          while(Echo == 1);
+  37   1          //波回来的那一下，我们开始停止定时器
+  38   1          TR1 = 0;
+  39   1          //4. 计算出中间经过多少时间
+  40   1          time = (TH1 * 256 + TL1)*1.085;//us为单位
+  41   1          //5. 距离 = 速度 （340m/s）* 时间/2
+  42   1          return  (time * 0.017);
+  43   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     97    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

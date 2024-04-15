@@ -1,0 +1,111 @@
+C51 COMPILER V9.52.0.0   TIME                                                              04/06/2024 11:19:19 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE TIME
+OBJECT MODULE PLACED IN time.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE time.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          
+   3          #include "motor.h"
+   4          
+   5          char speedLeft;
+   6          char cntLeft=0;
+   7          
+   8          char speedRight;
+   9          char cntRight=0;
+  10          
+  11          
+  12          void Time0Init()
+  13          {
+  14   1        //1. 配置定时器0工作模式位16位计时
+  15   1        TMOD = 0x01; //先调用无所谓
+  16   1        //2. 给初值，定一个0.5出来
+  17   1        TL0=0x33;
+  18   1        TH0=0xFE;
+  19   1        //3. 开始计时
+  20   1        TR0 = 1;
+  21   1        TF0 = 0;
+  22   1        //4. 打开定时器0中断
+  23   1        ET0 = 1;
+  24   1        //5. 打开总中断EA
+  25   1        EA = 1;
+  26   1      }
+  27          
+  28          
+  29          void Time1Init()
+  30          {
+  31   1        //1. 配置定时器0工作模式位16位计时
+  32   1        //TMOD = 0x01; // 后调用不能直接赋值
+  33   1        TMOD &= 0x0F;
+  34   1        TMOD |= 0x1 << 4;
+  35   1        //2. 给初值，定一个0.5出来
+  36   1        TL1=0x33;
+  37   1        TH1=0xFE;
+  38   1        //3. 开始计时
+  39   1        TR1 = 1;
+  40   1        TF1 = 0;
+  41   1        //4. 打开定时器1中断
+  42   1        ET1 = 1;
+  43   1        //5. 打开总中断EA
+  44   1        EA = 1;
+  45   1      }
+  46          
+  47          //定时器 0 对应的是中断1
+  48          void Time0Handler() interrupt 1
+  49          {
+  50   1        cntLeft++;  //统计爆表的次数. cnt=1的时候，报表了1
+  51   1        //重新给初值
+  52   1        TL0=0x33;
+  53   1        TH0=0xFE;
+  54   1        
+  55   1        //控制PWM波
+C51 COMPILER V9.52.0.0   TIME                                                              04/06/2024 11:19:19 PAGE 2   
+
+  56   1        if(cntLeft < speedLeft){//  前进  -- 占空比越高越快
+  57   2          goForwardLeft();
+  58   2        }else{//停止
+  59   2          stopLeft();
+  60   2        }
+  61   1        
+  62   1        if(cntLeft == 40){//爆表40次，经过了20ms
+  63   2          cntLeft = 0;  //当100次表示1s，重新让cnt从0开始，计算下一次的1s
+  64   2        }
+  65   1          
+  66   1      }
+  67          //定时器 1 对应的是中断3 -- 控制右轮
+  68          void Time1Handler() interrupt 3
+  69          {
+  70   1        cntRight++;  //统计爆表的次数. cnt=1的时候，报表了1
+  71   1        //重新给初值
+  72   1        TL1=0x33;
+  73   1        TH1=0xFE;
+  74   1        
+  75   1        //控制PWM波
+  76   1        if(cntLeft < speedRight){//  前进  -- 占空比越高越快
+  77   2          goForwardRight();
+  78   2        }else{//停止
+  79   2          stopRight();
+  80   2        }
+  81   1        
+  82   1        if(cntRight == 40){//爆表40次，经过了20ms
+  83   2          cntRight = 0;  //当100次表示1s，重新让cnt从0开始，计算下一次的1s
+  84   2        }
+  85   1          
+  86   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    225    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

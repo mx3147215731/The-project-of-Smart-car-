@@ -1,0 +1,73 @@
+C51 COMPILER V9.52.0.0   MAIN                                                              04/14/2024 20:17:34 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          
+   3          #include "motor.h"
+   4          #include "delay.h"
+   5          #include "uart.h"
+   6          #include "time.h"
+   7          
+   8          sbit leftSensor = P2^7;
+   9          sbit rightSensor = P2^6; 
+  10          
+  11          extern char speedLeft; //去整个工程中的其他文件找
+  12          extern char speedRight;
+  13          
+  14          void main()
+  15          {
+  16   1        Time0Init();//定时器 初始化 
+  17   1        Time1Init();
+  18   1        // 注意 我们TOMD这里的初始化是直接开赋值的方式 -- 我们 应该调用在串口初始�
+             -�之前，不然会把串口的TMOD给覆盖掉
+  19   1        //UartInit();//初始化 串口
+  20   1        while(1){
+  21   2          
+  22   2          
+  23   2        if(!leftSensor && !rightSensor){ //两个低电平，两个模块都能反射回来红外线 -- 亮灯 --
+             - 向前
+  24   3        speedLeft=25;
+  25   3        speedRight=25;
+  26   3        }
+  27   2        if(leftSensor && !rightSensor){//左边模块被黑线吸收，无法返回红外线 -- 高电平--灭�
+             -� --左转
+  28   3        speedLeft=5;
+  29   3        speedRight=25;
+  30   3        } 
+  31   2        if(!leftSensor && rightSensor){//右边模块被黑线吸收，无法返回红外线 -- 高电平--灭灯
+             - -- 右转
+  32   3        speedLeft=25;
+  33   3        speedRight=5;
+  34   3        } 
+  35   2         if(leftSensor && rightSensor){
+  36   3         //左右模块都没反射回来 -- 停
+  37   3        speedLeft=0;
+  38   3        speedRight=0;
+  39   3        }
+  40   2        
+  41   2      
+  42   2        }
+  43   1      
+  44   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     55    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+C51 COMPILER V9.52.0.0   MAIN                                                              04/14/2024 20:17:34 PAGE 2   
+
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

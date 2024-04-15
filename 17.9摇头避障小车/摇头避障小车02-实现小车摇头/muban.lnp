@@ -1,0 +1,7 @@
+"STARTUP.obj",
+"main.obj",
+"hc04.obj",
+"delay.obj",
+"sg90.obj" 
+TO "muban" 
+RAMSIZE(256) 

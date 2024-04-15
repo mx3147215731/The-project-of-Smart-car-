@@ -1,0 +1,52 @@
+C51 COMPILER V9.52.0.0   MAIN                                                              04/05/2024 21:20:56 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          
+   3          #include "motor.h"
+   4          #include "delay.h"
+   5          #include "uart.h"
+   6          #include "time.h"
+   7          
+   8          extern char speed; //去整个工程中的其他文件找
+   9          
+  10          void main()
+  11          {
+  12   1        Time0Init();//定时器 初始化 
+  13   1        // 注意 我们TOMD这里的初始化是直接开赋值的方式 -- 我们 应该调用在串口初始�
+             -�之前，不然会把串口的TMOD给覆盖掉
+  14   1        //UartInit();//初始化 串口
+  15   1        while(1){
+  16   2        speed=20; // 20 ms -- 40 * 0.5 -- 全速运行 5ms -- 5/20= 20% 占空比 来控制他的速度
+  17   2        Delay1000ms();
+  18   2        Delay1000ms();
+  19   2        speed=30;
+  20   2        Delay1000ms();
+  21   2        Delay1000ms();
+  22   2        speed=40;
+  23   2        Delay1000ms();
+  24   2        Delay1000ms();
+  25   2        
+  26   2        }
+  27   1      
+  28   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     32    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

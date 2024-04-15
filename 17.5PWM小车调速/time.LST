@@ -1,0 +1,66 @@
+C51 COMPILER V9.52.0.0   TIME                                                              04/05/2024 21:20:57 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE TIME
+OBJECT MODULE PLACED IN time.OBJ
+COMPILER INVOKED BY: F:\all_for_51\keil\C51\BIN\C51.EXE time.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          #include "reg52.h"
+   2          
+   3          #include "motor.h"
+   4          
+   5          char speed;
+   6          char cnt=0;
+   7          
+   8          void Time0Init()
+   9          {
+  10   1        //1. 配置定时器0工作模式位16位计时
+  11   1        TMOD = 0x01;
+  12   1        //2. 给初值，定一个0.5出来
+  13   1        TL0=0x33;
+  14   1        TH0=0xFE;
+  15   1        //3. 开始计时
+  16   1        TR0 = 1;
+  17   1        TF0 = 0;
+  18   1        //4. 打开定时器0中断
+  19   1        ET0 = 1;
+  20   1        //5. 打开总中断EA
+  21   1        EA = 1;
+  22   1      }
+  23          
+  24          
+  25          void Time0Handler() interrupt 1
+  26          {
+  27   1        cnt++;  //统计爆表的次数. cnt=1的时候，报表了1
+  28   1        //重新给初值
+  29   1        TL0=0x33;
+  30   1        TH0=0xFE;
+  31   1        
+  32   1        //控制PWM波
+  33   1        if(cnt < speed){//  前进  -- 占空比越高越快
+  34   2          goForward();
+  35   2        }else{//停止
+  36   2          stop();
+  37   2        }
+  38   1        
+  39   1        if(cnt == 40){//爆表40次，经过了20ms
+  40   2          cnt = 0;  //当100次表示1s，重新让cnt从0开始，计算下一次的1s
+  41   2        }
+  42   1          
+  43   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    111    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
